@@ -10,7 +10,7 @@ def get_abi_grid():
 
     '''
 
-    filename="../Data/G16_east_grid.bin"
+    filename="/Users/nmesa/Desktop/NASA_GLM_Project/climatology_glm-main/Data/G16_east_grid.bin"
 
     f = open(filename,'rb') #Open the file
 
@@ -46,7 +46,7 @@ def read_satzen():
     Use in coordination with get_abi_grid
     '''
 
-    filename="../Data/G16_east_SATZEN.bin"
+    filename="/Users/nmesa/Desktop/NASA_GLM_Project/climatology_glm-main/Data/G16_east_SATZEN.bin"
 
     f = open(filename,'rb') #Open the file
 

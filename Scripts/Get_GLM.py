@@ -32,7 +32,12 @@ def window_var(var,lat,lon,latmin,latmax,lonmin,lonmax,ret_latlon=False):
 
 
 
-def read_glm_filelist(filelist, apply_qc=True,output_qc=False):
+def read_glm_filelist(filelist_path, apply_qc=True,output_qc=False):
+
+    #Use os module to loop through files
+    path = filelist_path
+    dir = os.listdir(path)
+
     '''
     This function will read in the filelist of glm netcdf files and then output arrays of the lightning groups
 
@@ -58,12 +63,11 @@ def read_glm_filelist(filelist, apply_qc=True,output_qc=False):
     flag_lf = []   
     flnum_lf = []
 
-    if len(filelist)<1:
+    if len(dir)<1:
         return np.array(lats_l), np.array(lons_l), np.array(ener_l), np.array(area_l), np.array(flag_l), np.array(flid_l), np.array(lats_lf), np.array(lons_lf), np.array(ener_lf), np.array(area_lf), np.array(flag_lf)
 
-
-    for filename in filelist:
-        GLM_file = Dataset(filename)
+    for filename in dir:
+        GLM_file = Dataset(os.path.join(filelist_path, filename))
 
         #Area units were changed in 2019 from km2 to m2 so convert to m2
         area_unit = GLM_file.variables['group_area'].units

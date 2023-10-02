@@ -1,11 +1,12 @@
 import numpy as np
 import datetime
 from scipy import stats
+import matplotlib.pyplot as plt
 
 
 class CONFIG:
     #Read in the namelist file and create a CONFIG class to be called by individual functions
-    config_file = np.genfromtxt('../Config/Namelist', dtype=str)
+    config_file = np.genfromtxt('/Users/nmesa/Desktop/NASA_GLM_Project/climatology_glm-main/Config/Namelist', dtype=str)
 
     for line in config_file: #Go through the file and execute the commands
         exec(''.join(line)) #What this does is essentially creat a global variable that is found when importing this code
