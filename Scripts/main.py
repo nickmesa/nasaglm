@@ -3,6 +3,7 @@ import netCDF4 as nc4
 from netCDF4 import Dataset
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 import os
 
 from Functions import *
@@ -14,6 +15,7 @@ YYYY = '2023'
 Sat = '16'
 HOURS = np.arange(0,24,1)
 i = 238
+time_interval_min = 5
 
 LAT_ARRAY,LON_ARRAY,LAT_BINS,LON_BINS = GET_GRID()
 
@@ -39,12 +41,22 @@ GLM_LNG_PATH = f'/Users/nmesa/Desktop/NASA_GLM_Project/gitrepo/nasaglm/Case_Stud
 for HI, HOUR in enumerate(HOURS):
     #Get all the files over this hour (not always the same)
     LIGHTNING_LIST = GLM_LNG_PATH+str(HOUR).zfill(2)+'/'
-    print('Processing %i GLM files for %iZ'%(len(LIGHTNING_LIST),HOUR))
-    #REMEMBER QC SET TO FALSE
-    lats_l, lons_l, ener_l, area_l, flag_l, flid_l, lats_lf, lons_lf, ener_lf, area_lf, flag_lf = read_glm_filelist(LIGHTNING_LIST, apply_qc=False,output_qc=False)
-    quick_display(ener_lf)
-                
+    dir = os.listdir(LIGHTNING_LIST)
+    #print('Processing %i GLM files for %iZ'%(len(LIGHTNING_LIST),HOUR))
+    min_interval_filelist = time_interval_filelist(time_interval_min, LIGHTNING_LIST)
+    for i in range(0,len(min_interval_filelist),1):
+        #REMEMBER QC SET TO FALSE
+        lats_l, lons_l, ener_l, area_l, flag_l, flid_l, lats_lf, lons_lf, ener_lf, area_lf, flag_lf = read_glm_filelist(min_interval_filelist[i], LIGHTNING_LIST, apply_qc=False,output_qc=False)
+        break
+    break
 
-print('test')
+ax = plt.axes(projection = ccrs.PlateCarree())
+#ax.add_feature(cfeature.COASTLINE)
+ax.set_extent([-70, -110, 0, 30])
+ax.scatter(lons_lf, lats_lf)
+plt.plot(-86.10,19.40, color = 'red', marker = 'x')
+plt.show()
 
-#2023/0826/OR_GLM-L2-LCFA_G16_s2023
+
+
+

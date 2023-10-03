@@ -32,19 +32,10 @@ def window_var(var,lat,lon,latmin,latmax,lonmin,lonmax,ret_latlon=False):
 
 
 
-def read_glm_filelist(filelist_path, apply_qc=True,output_qc=False):
-
-    #Use os module to loop through files
-    path = filelist_path
-    dir = os.listdir(path)
+def read_glm_filelist(filelist, filepath, apply_qc=True,output_qc=False):
 
     '''
     This function will read in the filelist of glm netcdf files and then output arrays of the lightning groups
-
-
-
-
-
     '''
 
     #For Groups
@@ -63,11 +54,11 @@ def read_glm_filelist(filelist_path, apply_qc=True,output_qc=False):
     flag_lf = []   
     flnum_lf = []
 
-    if len(dir)<1:
+    if len(filelist)<1:
         return np.array(lats_l), np.array(lons_l), np.array(ener_l), np.array(area_l), np.array(flag_l), np.array(flid_l), np.array(lats_lf), np.array(lons_lf), np.array(ener_lf), np.array(area_lf), np.array(flag_lf)
 
-    for filename in dir:
-        GLM_file = Dataset(os.path.join(filelist_path, filename))
+    for filename in filelist:
+        GLM_file = Dataset(os.path.join(filepath, filename))
 
         #Area units were changed in 2019 from km2 to m2 so convert to m2
         area_unit = GLM_file.variables['group_area'].units
@@ -187,7 +178,25 @@ def get_d2l(filepath,lat_,lon_,lat_min,lat_max,lon_min,lon_max):
     #Now output the shrunken data
     return window_var(Dist_land,lat_,lon_,lat_min,lat_max,lon_min,lon_max)
 
+def time_interval_filelist(time_min_interval, filelist_path):
+    time_min_interval = int(time_min_interval)
 
+    #Use os module to loop through files
+    dir = os.listdir(filelist_path)
+    new_time_interval_list = np.empty((int(len(dir)/(3 * time_min_interval)),int(3 * time_min_interval)), dtype = object)
+
+    #Iterate through HHz directory and store data files in desired intervals
+    ii = 1
+    jj = 0
+    for file in sorted(dir):    
+        if int(file[29:31]) <  (time_min_interval * ii) and int(file[29:31]) >= ((time_min_interval * ii) - time_min_interval):
+            new_time_interval_list[ii -1,jj] = str(file)
+            jj = jj + 1
+            if jj == 15:
+                ii = ii + 1
+                jj = 0
+
+    return new_time_interval_list
 
 if __name__ == '__main__':
     #-------------------
