@@ -183,18 +183,21 @@ def time_interval_filelist(time_min_interval, filelist_path):
 
     #Use os module to loop through files
     dir = os.listdir(filelist_path)
-    new_time_interval_list = np.empty((int(len(dir)/(3 * time_min_interval)),int(3 * time_min_interval)), dtype = object)
+    new_time_interval_list = np.empty((int(180/(3 * time_min_interval)),int(3 * time_min_interval)), dtype = object)
 
     #Iterate through HHz directory and store data files in desired intervals
     ii = 1
     jj = 0
-    for file in sorted(dir):    
-        if int(file[29:31]) <  (time_min_interval * ii) and int(file[29:31]) >= ((time_min_interval * ii) - time_min_interval):
-            new_time_interval_list[ii -1,jj] = str(file)
-            jj = jj + 1
-            if jj == 15:
-                ii = ii + 1
-                jj = 0
+    for file in sorted(dir):   
+        if file == '.DS_Store':
+            continue
+        else:
+            if int(file[29:31]) <  (time_min_interval * ii) and int(file[29:31]) >= ((time_min_interval * ii) - time_min_interval):
+                new_time_interval_list[ii -1,jj] = str(file)
+                jj = jj + 1
+                if jj == 15:
+                    ii = ii + 1
+                    jj = 0
 
     return new_time_interval_list
 

@@ -3,7 +3,7 @@ from netCDF4 import Dataset
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 
-file = '/Users/nmesa/Desktop/NASA_GLM_Project/GLM-L2-LCFA-2019-244-16-OR_GLM-L2-LCFA_G16_s20192441600000_e20192441600200_c20192441600227.nc'
+file = '/Users/nasarosesnas/glmtc/GLM/L2/2017/0828/OR_GLM-L2-LCFA_G16_s20172400002000_e20172400002200_c20172400002226.nc'
 data = Dataset(file, mode = 'r')
 
 flash_lat = data.variables['flash_lat'][:]
